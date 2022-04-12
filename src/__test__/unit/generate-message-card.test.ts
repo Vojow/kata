@@ -1,4 +1,4 @@
-import { generateMessageCard } from "src/generate-message-card";
+import { generateMessageCard } from "../../generate-message-card";
 
 describe("generateMessageCard", () => {
   test("should return a proper message card", () => {

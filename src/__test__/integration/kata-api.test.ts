@@ -1,6 +1,6 @@
-import { generateMessageCard } from "src/generate-message-card";
+import { generateMessageCard } from "../../generate-message-card";
 import axios from "jest-mock-axios";
-import { getKata, sendKata } from "src/kata-api";
+import { getKata, sendKata } from "../../kata-api";
 
 afterEach(() => {
   // cleaning up the mess left behind the previous test

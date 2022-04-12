@@ -2,6 +2,7 @@
   "name": "kata-bot",
   "packageManager": "yarn@3.2.0",
   "scripts": {
+    "start": "ts-node ./index.ts",
     "test": "jest --verbose --coverage",
     "test:watch": "jest --verbose --watch",
     "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
