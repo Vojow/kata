@@ -2,11 +2,11 @@
   "name": "kata-bot",
   "packageManager": "yarn@3.2.0",
   "scripts": {
-    "start": "ts-node ./index.ts",
-    "sendCoder": "node ./send-coders.ts",
+    "start:kata": "ts-node ./index.ts",
+    "start:coder": "node ./index-coder.ts",
     "test": "jest --verbose --coverage",
     "test:watch": "jest --verbose --watch",
-    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
+    "coverage": "jest --verbose --coverage"
   },
   "dependencies": {
     "axios": "^0.26.1",
