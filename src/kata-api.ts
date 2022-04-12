@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Kata } from "./interfaces/Kata";
 import { generateMessageCard } from "./generate-message-card";
+import chooseCoders from "./choose-coders";
 
 export async function getKata() {
   return await axios.get(
@@ -21,6 +22,47 @@ export async function sendKata(data: Kata) {
     themeColor: "0072C6",
     summary: "Kata of the day",
     sections: [generateMessageCard(data)]
+  };
+  try {
+    const response = await axios.post(process.env.WEBHOOK_URL, card, {
+      headers: {
+        "content-type": "application/vnd.microsoft.teams.card.o365connector"
+      }
+    });
+    return `${response.status} - ${response.statusText}`;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function sendKataCoders() {
+  const coders = chooseCoders();
+  const card = {
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    themeColor: "0072C6",
+    summary: "Kata of the day",
+    sections: [
+      {
+        activityTitle: "Today winner to show code",
+        activitySubtitle: "On daily kata",
+        facts: [
+          {
+            name: "Winner",
+            value: coders[0]
+          },
+          {
+            name: "2nd place",
+            value: coders[1]
+          },
+          {
+            name: "3rd place",
+            value: coders[2]
+          }
+        ],
+        markdown: true
+      }
+    ]
   };
   try {
     const response = await axios.post(process.env.WEBHOOK_URL, card, {

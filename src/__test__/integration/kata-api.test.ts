@@ -1,6 +1,6 @@
 import { generateMessageCard } from "../../generate-message-card";
 import axios from "jest-mock-axios";
-import { getKata, sendKata } from "../../kata-api";
+import { getKata, sendKata, sendKataCoders } from "../../kata-api";
 
 afterEach(() => {
   // cleaning up the mess left behind the previous test
@@ -56,6 +56,21 @@ describe("sendKata", () => {
   test("should throw error", async () => {
     axios.post.mockRejectedValueOnce({ status: 400, statusText: "Bad request" });
     const response = await sendKata(data);
+    expect(axios.post).toBeCalledTimes(1);
+    expect(response).toMatchObject({ status: 400, statusText: "Bad request" });
+  });
+});
+
+describe("sendKataCoders", () => {
+  test("should send a proper data", async () => {
+    axios.post.mockResolvedValueOnce({ status: 200, statusText: "OK" });
+    const response = await sendKataCoders();
+    expect(axios.post).toBeCalledTimes(1);
+    expect(response).toBe("200 - OK");
+  });
+  test("should throw error", async () => {
+    axios.post.mockRejectedValueOnce({ status: 400, statusText: "Bad request" });
+    const response = await sendKataCoders();
     expect(axios.post).toBeCalledTimes(1);
     expect(response).toMatchObject({ status: 400, statusText: "Bad request" });
   });
