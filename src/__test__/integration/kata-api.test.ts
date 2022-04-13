@@ -62,6 +62,7 @@ describe("sendKata", () => {
 });
 
 describe("sendKataCoders", () => {
+  process.env.CODERS = "Test1,Test2,Test3";
   test("should send a proper data", async () => {
     axios.post.mockResolvedValueOnce({ status: 200, statusText: "OK" });
     const response = await sendKataCoders();
