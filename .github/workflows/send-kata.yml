@@ -24,6 +24,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+        env:
+          CODEWARS_AUTH_TOKEN: ${{ secrets.CODEWARS_AUTH_TOKEN }}
+          CODEWARS_COOKIE: ${{ secrets.CODEWARS_COOKIE }}
+          WEBHOOK_URL: $({ secrets.WEBHOOK_URL })
       - run: npm install
       - run: npm test
       - run: npm run start:kata
