@@ -1,36 +1,70 @@
 import { generateMessageCard } from "../../generate-message-card";
 import axios from "jest-mock-axios";
-import { getKata, sendKata, sendKataCoders } from "../../kata-api";
+import { getKata, getKataInRange, sendKata, sendKataCoders } from "../../kata-api";
 
 afterEach(() => {
   // cleaning up the mess left behind the previous test
   axios.reset();
 });
 
+const MOCKED_7_KYU = "7 kyu";
+const MOCKED_8_KYU = "8 kyu";
+const MOCKED_KATA = {
+  status: 200,
+  statusText: "OK",
+  data: {
+    name: "Kata of the day",
+    description: "description",
+    rankName: MOCKED_7_KYU,
+    href: "/href/100"
+  }
+};
+
 describe("getKata", () => {
   test("should return a proper kata", async () => {
-    axios.get.mockResolvedValueOnce({
-      status: 200,
-      statusText: "OK",
-      data: {
-        name: "Kata of the day",
-        description: "description",
-        rankName: "kyu 7",
-        href: "/href/100"
-      }
-    });
+    axios.get.mockResolvedValueOnce(MOCKED_KATA);
     const kata = await getKata();
-    expect(kata.data.name).toBeDefined();
-    expect(kata.data.description).toBeDefined();
-    expect(kata.data.rankName).toBeDefined();
-    expect(kata.data.href).toBeDefined();
+    expect(kata.name).toBeDefined();
+    expect(kata.description).toBeDefined();
+    expect(kata.rankName).toBeDefined();
+    expect(kata.href).toBeDefined();
+  });
+});
+
+describe("getKataInRange", () => {
+  test("should return a get between 5 and 7 kyu", async () => {
+    axios.get.mockResolvedValueOnce(MOCKED_KATA);
+    const kata = await getKataInRange({ start: 5, end: 7 });
+    const rank = +kata.rankName.split(" ")[0];
+    expect(rank).toBeGreaterThanOrEqual(5);
+    expect(rank).toBeLessThanOrEqual(7);
+  });
+  test("should return anything after 5 calls", async () => {
+    const mock = {
+      ...MOCKED_KATA,
+      data: { ...MOCKED_KATA.data, rankName: MOCKED_8_KYU }
+    };
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    axios.get.mockResolvedValueOnce(mock);
+    const kata = await getKataInRange({ start: 5, end: 7 });
+    const rank = +kata.rankName.split(" ")[0];
+    expect(rank).toBe(8);
+    expect(axios.get).toBeCalledTimes(10);
   });
 });
 describe("sendKata", () => {
   const data = {
     name: "Kata of the day",
     description: "description",
-    rankName: "kyu 7",
+    rankName: MOCKED_7_KYU,
     href: "/href/100"
   };
   test("should send a proper data", async () => {

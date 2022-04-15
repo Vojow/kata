@@ -3,16 +3,31 @@ import { Kata } from "./interfaces/Kata";
 import { generateMessageCard } from "./generate-message-card";
 import chooseCoders from "./choose-coders";
 
-export async function getKata() {
-  return await axios.get(
-    "https://www.codewars.com/trainer/peek/typescript/random?dequeue=true",
-    {
-      headers: {
-        Cookie: process.env.CODEWARS_COOKIE,
-        Authorization: process.env.CODEWARS_AUTH_TOKEN
+export async function getKata(): Promise<Kata> {
+  return (
+    await axios.get(
+      "https://www.codewars.com/trainer/peek/typescript/random?dequeue=true",
+      {
+        headers: {
+          Cookie: process.env.CODEWARS_COOKIE,
+          Authorization: process.env.CODEWARS_AUTH_TOKEN
+        }
       }
-    }
+    )
+  ).data;
+}
+
+export async function getKataInRange({ start, end }): Promise<Kata> {
+  let kata: Kata,
+    counter = 10;
+  do {
+    kata = await getKata();
+    counter--;
+  } while (
+    counter > 0 &&
+    (kata.rankName?.split(" ")[0] < start || kata.rankName?.split(" ")[0] > end)
   );
+  return kata;
 }
 
 export async function sendKata(data: Kata) {

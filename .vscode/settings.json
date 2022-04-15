@@ -15,7 +15,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "mochaExplorer.files": "**/*.spec.ts",
   "testExplorer.useNativeTesting": false,
