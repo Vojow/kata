@@ -27,8 +27,6 @@ jobs:
         env:
           CODERS: ${{ secrets.CODERS }}
           WEBHOOK_URL: $({ secrets.WEBHOOK_URL })
-      - run: echo $process.env.CODERS
-      - run: echo $({secrets.CODERS})
       - run: npm install
       - run: npm test
       - run: npm run start:coder
